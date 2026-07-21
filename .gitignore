@@ -1,0 +1,6 @@
+voltkart/.venv/
+voltkart/.env
+__pycache__/
+*.pyc
+.claude/
+.remember/
