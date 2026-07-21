@@ -25,21 +25,16 @@ does and the DBMS concepts each script demonstrates.
 
 ## Setup
 
-1. **Clone and enter the project**
+1. **Create a virtual environment and install dependencies**
    ```bash
-   git clone https://github.com/SrilakshmiVadlamoodi/hybrid-database.git
-   cd hybrid-database/voltkart
-   ```
-
-2. **Create a virtual environment and install dependencies**
-   ```bash
+   cd voltkart
    python -m venv .venv
    .venv\Scripts\activate      # Windows
    # source .venv/bin/activate   # macOS/Linux
    pip install -r requirements.txt
    ```
 
-3. **Configure environment variables**
+2. **Configure environment variables**
 
    Create a `voltkart/.env` file (it's gitignored, so it won't be committed):
    ```
@@ -53,17 +48,17 @@ does and the DBMS concepts each script demonstrates.
    MONGO_DB=voltkart
    ```
 
-4. **Create the Postgres database**
+3. **Create the Postgres database**
    ```bash
    psql -U postgres -h localhost -c "CREATE DATABASE voltkart;"
    ```
 
-5. **Load the schema**
+4. **Load the schema**
    ```bash
    psql -U postgres -h localhost -d voltkart -f schema.sql
    ```
 
-6. **Make sure MongoDB is running** — no manual setup needed; collections are created
+5. **Make sure MongoDB is running** — no manual setup needed; collections are created
    automatically on first write.
 
 ## Running
