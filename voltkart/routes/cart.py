@@ -3,7 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 import cart as cart_store
 from db import get_cursor
-from routes.common import get_all_customers
+from routes.common import get_all_customers, parse_customer_id
 from templates import templates
 
 router = APIRouter()
@@ -17,23 +17,40 @@ def add_to_cart(customer_id: int = Form(...), product_id: int = Form(...), qty: 
     return RedirectResponse(url=f"/cart?customer_id={customer_id}", status_code=303)
 
 
+@router.post("/cart/clear")
+def clear_cart(customer_id: int = Form(...)):
+    cart_store.clear_cart(customer_id)
+    return RedirectResponse(url=f"/cart?customer_id={customer_id}", status_code=303)
+
+
 @router.get("/cart", response_class=HTMLResponse)
-def view_cart(request: Request, customer_id: int, error: str | None = None):
-    cart = cart_store.get_cart(customer_id)
+def view_cart(request: Request, customer_id: str | None = None, error: str | None = None):
+    customer_id = parse_customer_id(customer_id)
     lines = []
     total = 0
     with get_cursor() as (conn, cur):
-        for product_id, qty in cart.items():
-            cur.execute(
-                "SELECT product_id, product_name, price, stock FROM products WHERE product_id = %s",
-                (product_id,),
-            )
-            product = cur.fetchone()
-            if not product:
-                continue
-            line_total = float(product["price"]) * qty
-            total += line_total
-            lines.append({**product, "qty": qty, "line_total": line_total})
+        if customer_id is not None:
+            cart = cart_store.get_cart(customer_id)
+            for product_id, qty in cart.items():
+                cur.execute(
+                    "SELECT product_id, product_name, price, stock FROM products WHERE product_id = %s",
+                    (product_id,),
+                )
+                product = cur.fetchone()
+                if not product:
+                    lines.append(
+                        {
+                            "product_id": product_id,
+                            "product_name": f"Product {product_id} (no longer available)",
+                            "price": 0,
+                            "qty": qty,
+                            "line_total": 0,
+                        }
+                    )
+                    continue
+                line_total = float(product["price"]) * qty
+                total += line_total
+                lines.append({**product, "qty": qty, "line_total": line_total})
         customers = get_all_customers(cur)
     return templates.TemplateResponse(
         request,
@@ -50,7 +67,7 @@ def view_cart(request: Request, customer_id: int, error: str | None = None):
 
 @router.post("/cart/checkout")
 def checkout(customer_id: int = Form(...), shipping_city: str = Form(...), payment_method: str = Form(...)):
-    cart = cart_store.get_cart(customer_id)
+    cart = cart_store.take_cart(customer_id)
     if not cart:
         return RedirectResponse(url=f"/cart?customer_id={customer_id}&error=Cart+is+empty", status_code=303)
 
@@ -101,11 +118,11 @@ def checkout(customer_id: int = Form(...), shipping_city: str = Form(...), payme
             conn.commit()
         except Exception as exc:
             conn.rollback()
+            cart_store.restore_cart(customer_id, cart)
             error_msg = str(exc).replace(" ", "+")
             return RedirectResponse(
                 url=f"/cart?customer_id={customer_id}&error={error_msg}",
                 status_code=303,
             )
 
-    cart_store.clear_cart(customer_id)
     return RedirectResponse(url=f"/orders?customer_id={customer_id}", status_code=303)

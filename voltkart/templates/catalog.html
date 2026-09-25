@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Products</h1>
 <form method="get" action="/">
-  <input type="hidden" name="customer_id" value="{{ customer_id or '' }}">
+  {% if customer_id %}<input type="hidden" name="customer_id" value="{{ customer_id }}">{% endif %}
   <label for="category">Category:</label>
   <select name="category" id="category" onchange="this.form.submit()">
     <option value="">All</option>
@@ -20,7 +20,7 @@
     <td>{{ p.brand }}</td>
     <td>₹{{ p.price }}</td>
     <td>{{ p.stock }}</td>
-    <td><a href="/products/{{ p.product_id }}?customer_id={{ customer_id or '' }}">View</a></td>
+    <td><a href="/products/{{ p.product_id }}{% if customer_id %}?customer_id={{ customer_id }}{% endif %}">View</a></td>
   </tr>
   {% endfor %}
 </table>

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Support tickets</h1>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
 {% if not customer_id %}
 <p>Select a customer above to view or submit tickets.</p>
 {% else %}
@@ -8,7 +9,7 @@
 <form method="post" action="/support/new">
   <input type="hidden" name="customer_id" value="{{ customer_id }}">
   <label for="subject">Subject:</label>
-  <input type="text" name="subject" id="subject" required>
+  <input type="text" name="subject" id="subject" maxlength="150" required>
   <label for="category">Category:</label>
   <select name="category" id="category">
     {% for cat in categories %}

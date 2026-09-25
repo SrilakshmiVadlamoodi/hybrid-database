@@ -8,7 +8,7 @@ from psycopg2 import pool
 
 load_dotenv()
 
-_pool = pool.SimpleConnectionPool(
+_pool = pool.ThreadedConnectionPool(
     1,
     10,
     host=os.getenv("PGHOST", "localhost"),

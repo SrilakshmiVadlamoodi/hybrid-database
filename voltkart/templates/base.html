@@ -8,10 +8,10 @@
 <body>
   <header>
     <nav>
-      <a href="/?customer_id={{ customer_id or '' }}">Catalog</a>
-      <a href="/cart?customer_id={{ customer_id or '' }}">Cart</a>
-      <a href="/orders?customer_id={{ customer_id or '' }}">Orders</a>
-      <a href="/support?customer_id={{ customer_id or '' }}">Support</a>
+      <a href="/{% if customer_id %}?customer_id={{ customer_id }}{% endif %}">Catalog</a>
+      <a href="/cart{% if customer_id %}?customer_id={{ customer_id }}{% endif %}">Cart</a>
+      <a href="/orders{% if customer_id %}?customer_id={{ customer_id }}{% endif %}">Orders</a>
+      <a href="/support{% if customer_id %}?customer_id={{ customer_id }}{% endif %}">Support</a>
       <a href="/admin">Admin</a>
     </nav>
     <form method="get" action="{{ request.url.path }}" class="customer-switcher">

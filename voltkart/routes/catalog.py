@@ -2,14 +2,15 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 
 from db import get_cursor
-from routes.common import get_all_customers
+from routes.common import get_all_customers, parse_customer_id
 from templates import templates
 
 router = APIRouter()
 
 
 @router.get("/", response_class=HTMLResponse)
-def home(request: Request, category: str | None = None, customer_id: int | None = None):
+def home(request: Request, category: str | None = None, customer_id: str | None = None):
+    customer_id = parse_customer_id(customer_id)
     with get_cursor() as (conn, cur):
         if category:
             cur.execute(
@@ -40,7 +41,8 @@ def home(request: Request, category: str | None = None, customer_id: int | None 
 
 
 @router.get("/products/{product_id}", response_class=HTMLResponse)
-def product_detail(request: Request, product_id: int, customer_id: int | None = None):
+def product_detail(request: Request, product_id: int, customer_id: str | None = None):
+    customer_id = parse_customer_id(customer_id)
     with get_cursor() as (conn, cur):
         cur.execute(
             "SELECT product_id, product_name, category, brand, price, stock, warranty_months "

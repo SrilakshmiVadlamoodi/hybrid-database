@@ -34,5 +34,10 @@
   </select>
   <button type="submit">Place order</button>
 </form>
+
+<form method="post" action="/cart/clear">
+  <input type="hidden" name="customer_id" value="{{ customer_id }}">
+  <button type="submit">Clear cart</button>
+</form>
 {% endif %}
 {% endblock %}
