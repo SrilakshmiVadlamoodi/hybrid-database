@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>VoltKart</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/?customer_id={{ customer_id or '' }}">Catalog</a>
+      <a href="/cart?customer_id={{ customer_id or '' }}">Cart</a>
+      <a href="/orders?customer_id={{ customer_id or '' }}">Orders</a>
+      <a href="/support?customer_id={{ customer_id or '' }}">Support</a>
+      <a href="/admin">Admin</a>
+    </nav>
+    <form method="get" action="{{ request.url.path }}" class="customer-switcher">
+      <label for="customer_id">Customer:</label>
+      <select name="customer_id" id="customer_id" onchange="this.form.submit()">
+        <option value="">-- select --</option>
+        {% for c in customers %}
+        <option value="{{ c.customer_id }}" {% if customer_id == c.customer_id %}selected{% endif %}>{{ c.full_name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

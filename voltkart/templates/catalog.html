@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Products</h1>
+<form method="get" action="/">
+  <input type="hidden" name="customer_id" value="{{ customer_id or '' }}">
+  <label for="category">Category:</label>
+  <select name="category" id="category" onchange="this.form.submit()">
+    <option value="">All</option>
+    {% for cat in categories %}
+    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+</form>
+<table>
+  <tr><th>Name</th><th>Category</th><th>Brand</th><th>Price</th><th>Stock</th><th></th></tr>
+  {% for p in products %}
+  <tr>
+    <td>{{ p.product_name }}</td>
+    <td>{{ p.category }}</td>
+    <td>{{ p.brand }}</td>
+    <td>₹{{ p.price }}</td>
+    <td>{{ p.stock }}</td>
+    <td><a href="/products/{{ p.product_id }}?customer_id={{ customer_id or '' }}">View</a></td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
