@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Orders</h1>
+{% if not customer_id %}
+<p>Select a customer above to view orders.</p>
+{% elif not orders %}
+<p>No orders yet.</p>
+{% else %}
+<table>
+  <tr><th>Order ID</th><th>Date</th><th>Status</th><th>Total</th><th>Shipping city</th></tr>
+  {% for o in orders %}
+  <tr>
+    <td>{{ o.order_id }}</td>
+    <td>{{ o.order_date }}</td>
+    <td>{{ o.status }}</td>
+    <td>₹{{ o.total_amount }}</td>
+    <td>{{ o.shipping_city }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Support tickets</h1>
+{% if not customer_id %}
+<p>Select a customer above to view or submit tickets.</p>
+{% else %}
+<h2>Submit a ticket</h2>
+<form method="post" action="/support/new">
+  <input type="hidden" name="customer_id" value="{{ customer_id }}">
+  <label for="subject">Subject:</label>
+  <input type="text" name="subject" id="subject" required>
+  <label for="category">Category:</label>
+  <select name="category" id="category">
+    {% for cat in categories %}
+    <option value="{{ cat }}">{{ cat }}</option>
+    {% endfor %}
+  </select>
+  <label for="order_id">Order ID (optional):</label>
+  <input type="number" name="order_id" id="order_id">
+  <button type="submit">Submit</button>
+</form>
+
+<h2>Your tickets</h2>
+{% if not tickets %}
+<p>No tickets yet.</p>
+{% else %}
+<table>
+  <tr><th>ID</th><th>Subject</th><th>Category</th><th>Status</th><th>Created</th></tr>
+  {% for t in tickets %}
+  <tr>
+    <td>{{ t.ticket_id }}</td>
+    <td>{{ t.subject }}</td>
+    <td>{{ t.category }}</td>
+    <td>{{ t.status }}</td>
+    <td>{{ t.created_at }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endif %}
+{% endblock %}
