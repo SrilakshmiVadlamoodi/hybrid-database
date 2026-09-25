@@ -1,46 +1,149 @@
+:root {
+  --primary: #6b3fa0;
+  --primary-dark: #4f2d78;
+  --accent: #f5a623;
+  --bg: #f6f3fb;
+  --surface: #ffffff;
+  --text: #241b33;
+  --muted: #6d6280;
+  --border: #e0d9ef;
+  --row-alt: #faf8ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: system-ui, sans-serif;
   margin: 0;
-  padding: 0 1.5rem 2rem;
-  color: #1a1a1a;
+  padding: 0;
+  color: var(--text);
+  background: var(--bg);
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid #ddd;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
   margin-bottom: 1.5rem;
 }
 
+header select {
+  border: none;
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+}
+
 nav a {
-  margin-right: 1rem;
+  margin-right: 1.25rem;
   text-decoration: none;
-  color: #0b5fff;
+  color: #fff;
+  font-weight: 600;
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover {
+  border-bottom: 2px solid var(--accent);
+}
+
+main {
+  padding: 0 1.5rem 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+h1, h2 {
+  color: var(--primary-dark);
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
   margin: 1rem 0;
+  background: var(--surface);
+  box-shadow: 0 1px 3px rgba(107, 63, 160, 0.12);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-th, td {
+th {
+  background: var(--primary);
+  color: #fff;
   text-align: left;
-  padding: 0.4rem 0.6rem;
-  border-bottom: 1px solid #eee;
+  padding: 0.55rem 0.7rem;
+}
+
+td {
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+}
+
+tr:nth-child(even) td {
+  background: var(--row-alt);
+}
+
+tr:hover td {
+  background: #f0e9fb;
+}
+
+a {
+  color: var(--primary);
 }
 
 .error {
   color: #b00020;
   font-weight: bold;
-}
-
-form label {
-  margin-right: 0.4rem;
+  background: #fdeaec;
+  border: 1px solid #f3c2c9;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
 }
 
 form {
   margin: 0.75rem 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  display: inline-block;
+}
+
+form label {
+  margin-right: 0.4rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+input, select {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.35rem 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.45rem 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  background: var(--muted);
+  cursor: not-allowed;
 }
