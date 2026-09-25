@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Cart</h1>
+{% if error %}<p class="error">{{ error }}</p>{% endif %}
+{% if not customer_id %}
+<p>Select a customer above to view a cart.</p>
+{% elif not lines %}
+<p>Cart is empty.</p>
+{% else %}
+<table>
+  <tr><th>Product</th><th>Price</th><th>Qty</th><th>Line total</th></tr>
+  {% for line in lines %}
+  <tr>
+    <td>{{ line.product_name }}</td>
+    <td>₹{{ line.price }}</td>
+    <td>{{ line.qty }}</td>
+    <td>₹{{ "%.2f"|format(line.line_total) }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<p>Total: ₹{{ "%.2f"|format(total) }}</p>
+
+<form method="post" action="/cart/checkout">
+  <input type="hidden" name="customer_id" value="{{ customer_id }}">
+  <label for="shipping_city">Shipping city:</label>
+  <input type="text" name="shipping_city" id="shipping_city" required>
+  <label for="payment_method">Payment method:</label>
+  <select name="payment_method" id="payment_method">
+    <option value="CARD">Card</option>
+    <option value="UPI">UPI</option>
+    <option value="NETBANKING">Net banking</option>
+    <option value="COD">Cash on delivery</option>
+    <option value="WALLET">Wallet</option>
+  </select>
+  <button type="submit">Place order</button>
+</form>
+{% endif %}
+{% endblock %}
