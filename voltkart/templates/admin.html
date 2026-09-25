@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Admin</h1>
+
+<h2>Customers</h2>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Email</th><th>City</th><th>State</th><th>Signup date</th></tr>
+  {% for c in customers_table %}
+  <tr><td>{{ c.customer_id }}</td><td>{{ c.full_name }}</td><td>{{ c.email }}</td><td>{{ c.city }}</td><td>{{ c.state }}</td><td>{{ c.signup_date }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Products</h2>
+<table>
+  <tr><th>ID</th><th>Name</th><th>Category</th><th>Brand</th><th>Price</th><th>Stock</th></tr>
+  {% for p in products %}
+  <tr><td>{{ p.product_id }}</td><td>{{ p.product_name }}</td><td>{{ p.category }}</td><td>{{ p.brand }}</td><td>₹{{ p.price }}</td><td>{{ p.stock }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Orders</h2>
+<table>
+  <tr><th>ID</th><th>Customer ID</th><th>Date</th><th>Status</th><th>Total</th></tr>
+  {% for o in orders %}
+  <tr><td>{{ o.order_id }}</td><td>{{ o.customer_id }}</td><td>{{ o.order_date }}</td><td>{{ o.status }}</td><td>₹{{ o.total_amount }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Payments</h2>
+<table>
+  <tr><th>ID</th><th>Order ID</th><th>Method</th><th>Amount</th><th>Status</th><th>Paid at</th></tr>
+  {% for pay in payments %}
+  <tr><td>{{ pay.payment_id }}</td><td>{{ pay.order_id }}</td><td>{{ pay.payment_method }}</td><td>₹{{ pay.amount }}</td><td>{{ pay.payment_status }}</td><td>{{ pay.paid_at }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
